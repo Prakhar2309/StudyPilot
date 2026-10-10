@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>StudyPilot AI — System Architecture & Development Schema</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap');
+    
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #0d1117;
+      color: #e6edf3;
+      padding: 40px 20px;
+      display: flex;
+      justify-content: center;
+    }
+    .container {
+      max-width: 1000px;
+      width: 100%;
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 16px;
+      padding: 48px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+    }
+    .badge {
+      display: inline-block;
+      padding: 6px 14px;
+      background: rgba(99, 102, 241, 0.15);
+      border: 1px solid #6366f1;
+      border-radius: 20px;
+      color: #a5b4fc;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 16px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    h1 {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: #ffffff;
+      margin-bottom: 8px;
+      background: linear-gradient(135deg, #ffffff 0%, #a5b4fc 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .subtitle {
+      color: #8b949e;
+      font-size: 1.05rem;
+      margin-bottom: 32px;
+      line-height: 1.5;
+    }
+    .meta-box {
+      background: #21262d;
+      border: 1px solid #30363d;
+      border-radius: 12px;
+      padding: 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 36px;
+    }
+    .meta-item { display: flex; flex-direction: column; gap: 4px; }
+    .meta-label { font-size: 0.75rem; text-transform: uppercase; color: #8b949e; font-weight: 600; }
+    .meta-val { font-size: 0.95rem; color: #f0f6fc; font-weight: 600; }
+    
+    h2 {
+      font-size: 1.4rem;
+      color: #f0f6fc;
+      margin: 36px 0 16px 0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 1px solid #30363d;
+      padding-bottom: 10px;
+    }
+    .diagram-card {
+      background: #0d1117;
+      border: 1px solid #30363d;
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 28px;
+    }
+    svg { width: 100%; height: auto; }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+      font-size: 0.9rem;
+    }
+    th, td {
+      padding: 12px 14px;
+      border: 1px solid #30363d;
+      text-align: left;
+    }
+    th {
+      background: #21262d;
+      color: #c9d1d9;
+      font-weight: 600;
+    }
+    td { background: #161b22; }
+    code {
+      font-family: 'JetBrains Mono', monospace;
+      background: #21262d;
+      padding: 2px 6px;
+      border-radius: 4px;
+      color: #f43f5e;
+      font-size: 0.85rem;
+    }
+    .tag {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    .tag-agent { background: rgba(99,102,241,0.2); color: #818cf8; border: 1px solid #6366f1; }
+    .tag-tool { background: rgba(16,185,129,0.2); color: #34d399; border: 1px solid #10b981; }
+  </style>
+</head>
+<body>
+  <div class="container" id="printable-schema">
+    <div class="badge">Category: (i) Agentic AI Agent (10 Marks)</div>
+    <h1>StudyPilot AI — System Development Schema</h1>
+    <p class="subtitle">Complete Architectural Blueprint, ReAct Decision Flow & Entity Data Dictionary for Autonomous Academic Study Planning.</p>
+    
+    <div class="meta-box">
+      <div class="meta-item">
+        <span class="meta-label">Project Name</span>
+        <span class="meta-val">StudyPilot AI</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Submission Category</span>
+        <span class="meta-val">Agentic Agent (10/10 Marks)</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">GitHub Repository</span>
+        <span class="meta-val"><a href="https://github.com/Prakhar2309/StudyPilot" style="color: #58a6ff; text-decoration: none;">github.com/Prakhar2309/StudyPilot</a></span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Architecture Style</span>
+        <span class="meta-val">ReAct Agent + 7 Tool Dispatcher</span>
+      </div>
+    </div>
+
+    <!-- 1. SYSTEM ARCHITECTURE DIAGRAM -->
+    <h2>1. High-Level System Architecture Diagram</h2>
+    <div class="diagram-card">
+      <svg viewBox="0 0 900 480" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="gradViolet" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#4f46e5" />
+            <stop offset="100%" stop-color="#7c3aed" />
+          </linearGradient>
+          <linearGradient id="gradBlue" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#2563eb" />
+            <stop offset="100%" stop-color="#0284c7" />
+          </linearGradient>
+          <linearGradient id="gradEmerald" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#059669" />
+            <stop offset="100%" stop-color="#10b981" />
+          </linearGradient>
+        </defs>
+
+        <!-- Presentation Layer -->
+        <rect x="30" y="30" width="230" height="200" rx="12" fill="#1c2333" stroke="#388bfd" stroke-width="2" />
+        <text x="145" y="60" text-anchor="middle" fill="#58a6ff" font-weight="700" font-size="14">PRESENTATION LAYER</text>
+        <rect x="50" y="80" width="190" height="35" rx="6" fill="#21262d" stroke="#30363d" />
+        <text x="145" y="102" text-anchor="middle" fill="#f0f6fc" font-size="12">React 18 + Vite (SPA)</text>
+        <rect x="50" y="125" width="190" height="35" rx="6" fill="#21262d" stroke="#30363d" />
+        <text x="145" y="147" text-anchor="middle" fill="#f0f6fc" font-size="12">Tailwind Modern Dark UI</text>
+        <rect x="50" y="170" width="190" height="45" rx="6" fill="#21262d" stroke="#30363d" />
+        <text x="145" y="188" text-anchor="middle" fill="#f0f6fc" font-size="11">Agent Console & Live</text>
+        <text x="145" y="203" text-anchor="middle" fill="#8b949e" font-size="10">Tool Trace Visualizer</text>
+
+        <!-- Arrow Client -> API -->
+        <line x1="260" y1="130" x2="330" y2="130" stroke="#58a6ff" stroke-width="2" marker-end="url(#arrow)" />
+        <text x="295" y="120" text-anchor="middle" fill="#8b949e" font-size="10">REST API</text>
+
+        <!-- Server API Layer -->
+        <rect x="330" y="30" width="220" height="200" rx="12" fill="#1c2333" stroke="#8b5cf6" stroke-width="2" />
+        <text x="440" y="60" text-anchor="middle" fill="#a78bfa" font-weight="700" font-size="14">API & BACKEND SERVER</text>
+        <rect x="350" y="80" width="180" height="35" rx="6" fill="#21262d" stroke="#30363d" />
+        <text x="440" y="102" text-anchor="middle" fill="#f0f6fc" font-size="12">Node.js Express Server</text>
+        <rect x="350" y="125" width="180" height="35" rx="6" fill="#21262d" stroke="#30363d" />
+        <text x="440" y="147" text-anchor="middle" fill="#f0f6fc" font-size="12">Zod Runtime Validation</text>
+        <rect x="350" y="170" width="180" height="45" rx="6" fill="#21262d" stroke="#30363d" />
+        <text x="440" y="188" text-anchor="middle" fill="#f0f6fc" font-size="11">REST Endpoints</text>
+        <text x="440" y="203" text-anchor="middle" fill="#8b949e" font-size="10">/agent/chat, /tasks, /sessions</text>
+
+        <!-- Arrow Server -> Agent -->
+        <line x1="550" y1="130" x2="620" y2="130" stroke="#8b5cf6" stroke-width="2" />
+        <text x="585" y="120" text-anchor="middle" fill="#8b949e" font-size="10">Invoke</text>
+
+        <!-- Autonomous Agent Engine Layer -->
+        <rect x="620" y="30" width="250" height="200" rx="12" fill="#1e1e38" stroke="#a855f7" stroke-width="2" />
+        <text x="745" y="60" text-anchor="middle" fill="#c084fc" font-weight="700" font-size="14">AGENTIC CORE ENGINE</text>
+        <rect x="640" y="80" width="210" height="35" rx="6" fill="url(#gradViolet)" />
+        <text x="745" y="102" text-anchor="middle" fill="#ffffff" font-weight="600" font-size="12">ReAct Orchestration Loop</text>
+        <rect x="640" y="125" width="210" height="35" rx="6" fill="#21262d" stroke="#30363d" />
+        <text x="745" y="147" text-anchor="middle" fill="#f0f6fc" font-size="11">Google Gemini LLM</text>
+        <rect x="640" y="170" width="210" height="45" rx="6" fill="#21262d" stroke="#30363d" />
+        <text x="745" y="188" text-anchor="middle" fill="#34d399" font-size="11">Deterministic Heuristic Fallback</text>
+        <text x="745" y="203" text-anchor="middle" fill="#8b949e" font-size="10">(Offline Autonomous Mode)</text>
+
+        <!-- Bottom: Tools & Database -->
+        <!-- Agent Tools -->
+        <rect x="30" y="270" width="520" height="180" rx="12" fill="#1c2826" stroke="#10b981" stroke-width="2" />
+        <text x="290" y="300" text-anchor="middle" fill="#34d399" font-weight="700" font-size="14">DETERMINISTIC AGENT TOOLS (7 TOOLS)</text>
+        
+        <g transform="translate(45, 320)">
+          <rect x="0" y="0" width="150" height="28" rx="4" fill="#21262d" stroke="#30363d" />
+          <text x="75" y="18" text-anchor="middle" fill="#e6edf3" font-size="10">get_student_context</text>
+
+          <rect x="160" y="0" width="150" height="28" rx="4" fill="#21262d" stroke="#30363d" />
+          <text x="235" y="18" text-anchor="middle" fill="#e6edf3" font-size="10">prioritize_tasks</text>
+
+          <rect x="320" y="0" width="160" height="28" rx="4" fill="#21262d" stroke="#30363d" />
+          <text x="400" y="18" text-anchor="middle" fill="#e6edf3" font-size="10">create_study_plan</text>
+
+          <rect x="0" y="38" width="150" height="28" rx="4" fill="#21262d" stroke="#30363d" />
+          <text x="75" y="56" text-anchor="middle" fill="#e6edf3" font-size="10">create_task</text>
+
+          <rect x="160" y="38" width="150" height="28" rx="4" fill="#21262d" stroke="#30363d" />
+          <text x="235" y="56" text-anchor="middle" fill="#e6edf3" font-size="10">update_task_status</text>
+
+          <rect x="320" y="38" width="160" height="28" rx="4" fill="#21262d" stroke="#30363d" />
+          <text x="400" y="56" text-anchor="middle" fill="#e6edf3" font-size="10">get_progress_summary</text>
+
+          <rect x="160" y="76" width="150" height="28" rx="4" fill="#21262d" stroke="#30363d" />
+          <text x="235" y="94" text-anchor="middle" fill="#e6edf3" font-size="10">revise_study_plan</text>
+        </g>
+
+        <!-- Connecting Agent to Tools -->
+        <path d="M 745 230 L 745 360 L 550 360" fill="none" stroke="#a855f7" stroke-width="2" stroke-dasharray="4" />
+        <text x="650" y="350" text-anchor="middle" fill="#a855f7" font-size="11">Tool Invocations</text>
+
+        <!-- Storage Layer -->
+        <rect x="620" y="270" width="250" height="180" rx="12" fill="#1f242c" stroke="#f59e0b" stroke-width="2" />
+        <text x="745" y="300" text-anchor="middle" fill="#fbbf24" font-weight="700" font-size="14">PERSISTENCE STORAGE</text>
+        <rect x="640" y="325" width="210" height="40" rx="6" fill="#21262d" stroke="#30363d" />
+        <text x="745" y="348" text-anchor="middle" fill="#f0f6fc" font-size="12">JSON Persistence Engine</text>
+        <rect x="640" y="375" width="210" height="55" rx="6" fill="#21262d" stroke="#30363d" />
+        <text x="745" y="395" text-anchor="middle" fill="#e6edf3" font-size="11">Tasks • Sessions • Subjects</text>
+        <text x="745" y="415" text-anchor="middle" fill="#8b949e" font-size="10">Agent Runs & Tool Traces</text>
+
+        <!-- Arrow Tools <-> DB -->
+        <line x1="550" y1="390" x2="620" y2="390" stroke="#f59e0b" stroke-width="2" />
+      </svg>
+    </div>
+
+    <!-- 2. AGENTIC DECISION LOOP -->
+    <h2>2. Agentic Workflow Loop (ReAct Framework)</h2>
+    <div class="diagram-card">
+      <svg viewBox="0 0 900 180" xmlns="http://www.w3.org/2000/svg">
+        <!-- 5 Step Agentic Process -->
+        <!-- Step 1 -->
+        <rect x="20" y="40" width="150" height="100" rx="10" fill="#21262d" stroke="#6366f1" stroke-width="2" />
+        <circle cx="95" cy="30" r="14" fill="#6366f1" />
+        <text x="95" y="35" text-anchor="middle" fill="#ffffff" font-size="11" font-weight="700">1</text>
+        <text x="95" y="75" text-anchor="middle" fill="#f0f6fc" font-weight="700" font-size="13">User Goal</text>
+        <text x="95" y="95" text-anchor="middle" fill="#8b949e" font-size="10">"Plan my exams for</text>
+        <text x="95" y="110" text-anchor="middle" fill="#8b949e" font-size="10">upcoming 3 days"</text>
+
+        <line x1="170" y1="90" x2="200" y2="90" stroke="#6366f1" stroke-width="2" />
+
+        <!-- Step 2 -->
+        <rect x="200" y="40" width="150" height="100" rx="10" fill="#21262d" stroke="#8b5cf6" stroke-width="2" />
+        <circle cx="275" cy="30" r="14" fill="#8b5cf6" />
+        <text x="275" y="35" text-anchor="middle" fill="#ffffff" font-size="11" font-weight="700">2</text>
+        <text x="275" y="75" text-anchor="middle" fill="#f0f6fc" font-weight="700" font-size="13">Reasoning</text>
+        <text x="275" y="95" text-anchor="middle" fill="#8b949e" font-size="10">Agent analyzes</text>
+        <text x="275" y="110" text-anchor="middle" fill="#8b949e" font-size="10">constraints & context</text>
+
+        <line x1="350" y1="90" x2="380" y2="90" stroke="#8b5cf6" stroke-width="2" />
+
+        <!-- Step 3 -->
+        <rect x="380" y="40" width="150" height="100" rx="10" fill="#21262d" stroke="#10b981" stroke-width="2" />
+        <circle cx="455" cy="30" r="14" fill="#10b981" />
+        <text x="455" y="35" text-anchor="middle" fill="#ffffff" font-size="11" font-weight="700">3</text>
+        <text x="455" y="75" text-anchor="middle" fill="#f0f6fc" font-weight="700" font-size="13">Action (Tools)</text>
+        <text x="455" y="95" text-anchor="middle" fill="#8b949e" font-size="10">Calls prioritize_tasks()</text>
+        <text x="455" y="110" text-anchor="middle" fill="#8b949e" font-size="10">& create_study_plan()</text>
+
+        <line x1="530" y1="90" x2="560" y2="90" stroke="#10b981" stroke-width="2" />
+
+        <!-- Step 4 -->
+        <rect x="560" y="40" width="150" height="100" rx="10" fill="#21262d" stroke="#f59e0b" stroke-width="2" />
+        <circle cx="635" cy="30" r="14" fill="#f59e0b" />
+        <text x="635" y="35" text-anchor="middle" fill="#ffffff" font-size="11" font-weight="700">4</text>
+        <text x="635" y="75" text-anchor="middle" fill="#f0f6fc" font-weight="700" font-size="13">Observation</text>
+        <text x="635" y="95" text-anchor="middle" fill="#8b949e" font-size="10">Examines tool output</text>
+        <text x="635" y="110" text-anchor="middle" fill="#8b949e" font-size="10">& schedule validity</text>
+
+        <line x1="710" y1="90" x2="740" y2="90" stroke="#f59e0b" stroke-width="2" />
+
+        <!-- Step 5 -->
+        <rect x="740" y="40" width="140" height="100" rx="10" fill="#21262d" stroke="#06b6d4" stroke-width="2" />
+        <circle cx="810" cy="30" r="14" fill="#06b6d4" />
+        <text x="810" y="35" text-anchor="middle" fill="#ffffff" font-size="11" font-weight="700">5</text>
+        <text x="810" y="75" text-anchor="middle" fill="#f0f6fc" font-weight="700" font-size="13">Final Plan</text>
+        <text x="810" y="95" text-anchor="middle" fill="#8b949e" font-size="10">Delivers actionable</text>
+        <text x="810" y="110" text-anchor="middle" fill="#8b949e" font-size="10">plan with reasoning</text>
+      </svg>
+    </div>
+
+    <!-- 3. DATABASE ENTITY SCHEMA -->
+    <h2>3. Database Entity Relationship (ER) Schema</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Entity / Table</th>
+          <th>Primary Key</th>
+          <th>Foreign Keys</th>
+          <th>Attributes & Field Types</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>student_settings</code></td>
+          <td><code>id</code> (UUID)</td>
+          <td>None</td>
+          <td><code>daily_hours (int), study_start_time, study_end_time, break_duration</code></td>
+          <td>Student study preferences & daily capacity budget</td>
+        </tr>
+        <tr>
+          <td><code>subjects</code></td>
+          <td><code>id</code> (UUID)</td>
+          <td>None</td>
+          <td><code>name (varchar), color (hex), target_hours_per_week (int)</code></td>
+          <td>Enrolled academic subjects/courses</td>
+        </tr>
+        <tr>
+          <td><code>topics</code></td>
+          <td><code>id</code> (UUID)</td>
+          <td><code>subject_id</code> &rarr; subjects.id</td>
+          <td><code>title (varchar), completed (boolean)</code></td>
+          <td>Syllabus topic checklist items per course</td>
+        </tr>
+        <tr>
+          <td><code>tasks</code></td>
+          <td><code>id</code> (UUID)</td>
+          <td><code>subject_id, topic_id</code></td>
+          <td><code>title, deadline (ISO), priority (enum), difficulty (1-5), estimated_hours, status</code></td>
+          <td>Academic assignments, homeworks, and exams</td>
+        </tr>
+        <tr>
+          <td><code>study_sessions</code></td>
+          <td><code>id</code> (UUID)</td>
+          <td><code>task_id</code> &rarr; tasks.id</td>
+          <td><code>title, date (YYYY-MM-DD), start_time, end_time, duration_minutes, status</code></td>
+          <td>Conflict-free scheduled calendar study blocks</td>
+        </tr>
+        <tr>
+          <td><code>agent_runs</code></td>
+          <td><code>id</code> (UUID)</td>
+          <td>None</td>
+          <td><code>prompt, model, response, is_demo (bool), tool_calls_count, created_at</code></td>
+          <td>Audit trail of user prompts & agent runs</td>
+        </tr>
+        <tr>
+          <td><code>agent_tool_calls</code></td>
+          <td><code>id</code> (UUID)</td>
+          <td><code>run_id</code> &rarr; agent_runs.id</td>
+          <td><code>tool_name, input_args (JSON), output_result (JSON), status, executed_at</code></td>
+          <td>Step-by-step tool invocation trace log</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- 4. AGENT TOOL REGISTRY -->
+    <h2>4. Deterministic Agent Tools Contract</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Tool Name</th>
+          <th>Input Parameters</th>
+          <th>Return Output</th>
+          <th>Agent Decision Role</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>get_student_context</code></td>
+          <td>None</td>
+          <td>Active subjects, pending tasks, daily hour capacity</td>
+          <td>Grounds the agent in current academic state</td>
+        </tr>
+        <tr>
+          <td><code>prioritize_tasks</code></td>
+          <td><code>include_completed (bool)</code></td>
+          <td>Ranked tasks with computed urgency score</td>
+          <td>Applies dynamic deadline & weight formula</td>
+        </tr>
+        <tr>
+          <td><code>create_study_plan</code></td>
+          <td><code>days_ahead (int), focus_subject_id (opt)</code></td>
+          <td>Generated conflict-free study sessions</td>
+          <td>Translates priorities into concrete timetable</td>
+        </tr>
+        <tr>
+          <td><code>create_task</code></td>
+          <td><code>title, subject_name, deadline, priority...</code></td>
+          <td>Created task object with generated ID</td>
+          <td>Natural language assignment intake</td>
+        </tr>
+        <tr>
+          <td><code>update_task_status</code></td>
+          <td><code>task_title_or_id, status (enum)</code></td>
+          <td>Status update confirmation</td>
+          <td>Maintains real-time task progress state</td>
+        </tr>
+        <tr>
+          <td><code>get_progress_summary</code></td>
+          <td>None</td>
+          <td>Completion percentages & study metrics</td>
+          <td>Provides analytics and study performance stats</td>
+        </tr>
+        <tr>
+          <td><code>revise_study_plan</code></td>
+          <td><code>reason (str), reschedule_missed_only (bool)</code></td>
+          <td>Adjusted timetable preserving completed work</td>
+          <td>Dynamic adaptation when sessions are missed</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div style="margin-top: 32px; padding: 16px; background: #21262d; border-radius: 8px; text-align: center; font-size: 0.9rem; color: #8b949e;">
+      StudyPilot AI — College Assignment Submission for <strong style="color: #f0f6fc;">DA-III: AI-Agent Development</strong> (Category: Agentic Agent — 10 Marks).<br/>
+      Repository: <a href="https://github.com/Prakhar2309/StudyPilot" style="color: #58a6ff;">https://github.com/Prakhar2309/StudyPilot</a>
+    </div>
+  </div>
+</body>
+</html>
